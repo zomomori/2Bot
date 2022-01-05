@@ -9,8 +9,8 @@
 .joke : Say a random joke<br />
 .rps : Start a rock-paper-scissor game<br />
 .poll title, <specify emoji> option1, <specify emoji> option2... : Create a poll<br /><br />
-.h     : Help<br />
-.hh    : Detailed help<br /><br />
+.h : Help<br />
+.hh : Detailed help<br /><br />
 ```
 <br />Add the bot to your server: https://discord.com/api/oauth2/authorize?client_id=926824255696535612&permissions=533113207872&scope=bot<br /><br />
 Contact zoe#4444 for any issues.
