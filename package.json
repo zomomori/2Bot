@@ -1,0 +1,18 @@
+{
+  "name": "2Bot",
+  "version": "1.0.0",
+  "description": "Zoe's Discord Bot",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^13.5.0",
+    "fetch-subreddit": "^3.0.0",
+    "node": "^17.3.0",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Zoe",
+  "license": "GNU"
+}
