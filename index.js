@@ -1,6 +1,7 @@
 const Discord = require("discord.js")
 const config = require("./botconfig.json");
 const request = require("request");
+const keepAlive = require("./server")
 
 const { fetchRandomSubredditName, fetchRandomNSFWSubredditName } = require('fetch-subreddit');
 
@@ -64,6 +65,7 @@ bot.on("messageCreate", async message => {
 				'\n `.joke :` Say a random joke' +
 				'\n `.rps :` Start a rock-paper-scissor game' +
 				'\n `.poll title, <specify emoji> option1, <specify emoji> option2... :` Create a poll' +
+				'\n `.8ball <question> :` Let magic 8-ball decide your fortune ' +
 				'\n' +
 				'\n `.h     :` Help' +
 				'\n `.hh    :` Detailed help ' +
@@ -85,10 +87,10 @@ bot.on("messageCreate", async message => {
         let sub = res.request.uri.href;
         sub = sub.substring(25);
         sub = sub.substring(0, sub.indexOf('/'));
-        redditRequest('https://www.reddit.com/r/' + sub + '/top/.json?t=all&limit=100', err_message, false, sub);
+        redditRequest('https://www.reddit.com/r/' + sub + '/top/.json?t=all&limit=100', err_message, false, sub, message.channel.nsfw);
       });
 		} else {
-      redditRequest('https://www.reddit.com/r/' + args + '/top/.json?t=all&limit=100', err_message, false, args);
+      redditRequest('https://www.reddit.com/r/' + args + '/top/.json?t=all&limit=100', err_message, false, args, message.channel.nsfw);
     }
 	}
 
@@ -99,10 +101,10 @@ bot.on("messageCreate", async message => {
         let sub = res.request.uri.href;
         sub = sub.substring(25);
         sub = sub.substring(0, sub.indexOf('/'));
-        redditRequest('https://www.reddit.com/r/' + sub + '/top/.json?t=month&limit=100', err_message, false, sub);
+        redditRequest('https://www.reddit.com/r/' + sub + '/top/.json?t=month&limit=100', err_message, false, sub, message.channel.nsfw);
       });
 		} else {
-      redditRequest('https://www.reddit.com/r/' + args + '/top/.json?t=month&limit=100', err_message, false, args);
+      redditRequest('https://www.reddit.com/r/' + args + '/top/.json?t=month&limit=100', err_message, false, args, message.channel.nsfw);
     }
 	}
 
@@ -113,10 +115,10 @@ bot.on("messageCreate", async message => {
         let sub = res.request.uri.href;
         sub = sub.substring(25);
         sub = sub.substring(0, sub.indexOf('/'));
-        redditRequest('https://www.reddit.com/r/' + sub + '/top/.json?t=all&limit=1', err_message, true, sub);
+        redditRequest('https://www.reddit.com/r/' + sub + '/top/.json?t=all&limit=1', err_message, true, sub, message.channel.nsfw);
       });
 		} else {
-      redditRequest('https://www.reddit.com/r/' + args + '/top/.json?t=all&limit=1', err_message, true, args);
+      redditRequest('https://www.reddit.com/r/' + args + '/top/.json?t=all&limit=1', err_message, true, args, message.channel.nsfw);
     }
 	}
 
@@ -200,7 +202,7 @@ bot.on("messageCreate", async message => {
 		});
 	}
 
-  function redditRequest(requestLink, errorMessage, isTop, sub_reddit) {
+  function redditRequest(requestLink, errorMessage, isTop, sub_reddit, isNSFWChannel) {
     console.log('request link: ' + requestLink);
     request(requestLink, function (error, response, body) {
 			let json = JSON.parse(body);
@@ -210,6 +212,16 @@ bot.on("messageCreate", async message => {
           randnum = 0;
         } else {
           randnum = Math.floor((Math.random() * 100) + 0);
+        }
+        let nsfwPost = json['data']['children'][randnum]['data']['over_18'];
+        if (!isNSFWChannel && nsfwPost) {
+          let reEmbed = new Discord.MessageEmbed()
+					  .setColor('#0099ff')
+					  .setTitle(
+							  '⚠️ Error getting data from r/' + sub_reddit
+						  )
+					  .setDescription('Post is NSFW, please view in an NSFW channel!');
+				  return message.channel.send({embeds: [reEmbed]});
         }
 				let imgurl = json['data']['children'][randnum]['data']['url'];
 				let title = json['data']['children'][randnum]['data']['title'];
@@ -246,7 +258,7 @@ bot.on("messageCreate", async message => {
 				let reEmbed = new Discord.MessageEmbed()
 					.setColor('#0099ff')
 					.setTitle(
-							'⚠️ Error getting data from ' + args
+							'⚠️ Error getting data from r/' + sub_reddit
 						)
 					.setDescription(errorMessage);
 				return message.channel.send({embeds: [reEmbed]});
@@ -299,6 +311,17 @@ bot.on("messageCreate", async message => {
       }
     }
   }
+  
+  if(cmd == `${prefix}8ball`) {
+    let string = message.content.substring(7);
+    if (string === "") {
+        message.channel.send('You didn\'t ask a question... ');
+    } else {
+      var choices = ['It is certain.','As I see it, yes.','Reply hazy, try again.','Don\'t count on it.','It is decidedly so.','Most likely.','Ask again later.','My reply is no.','Without a doubt.','Outlook good.','Better not tell you now.','My sources say no.','Yes definitely.','Yes.','Cannot predict now.','Outlook not so good.','You may rely on it.','Signs point to yes.','Concentrate and ask again.','Very doubtful.'];
+	    var response = choices[Math.floor(Math.random()*20)];
+      message.channel.send('``'+ response + '``');
+    }
+	}
 
   if(cmd == `${prefix}rps`) {
     if (waitingForRPS === true) {
@@ -359,4 +382,5 @@ bot.on("messageCreate", async message => {
   }
 });
 
+keepAlive()
 bot.login(process.env['TOKEN'])

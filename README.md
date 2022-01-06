@@ -9,6 +9,7 @@
 .joke : Say a random joke
 .rps : Start a rock-paper-scissor game
 .poll title, <specify emoji> option1, <specify emoji> option2... : Create a poll
+.8ball : let magic 8-ball decide your fortune
 
 .h : Help
 .hh : Detailed help
