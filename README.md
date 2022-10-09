@@ -17,5 +17,5 @@
 .h : Help
 .hh : Detailed help
 ```
-<br /><br />Add the bot to your server: N/A (No funds to host anymore :( )t<br />
+<br /><br />Add the bot to your server: N/A (No funds to host anymore :( )<br />
 Contact zoe#6666 for any issues.
