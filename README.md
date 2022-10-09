@@ -1,5 +1,5 @@
 
-=======
+2Bot - Discord Chatbot
 
  Current commands:
 ```sh
