@@ -17,5 +17,5 @@
 .h : Help
 .hh : Detailed help
 ```
-<br /><br />Add the bot to your server: https://discord.com/api/oauth2/authorize?client_id=926824255696535612&permissions=533113207872&scope=bot<br />
+<br /><br />Add the bot to your server: N/A (No funds to host anymore :( )t<br />
 Contact zoe#6666 for any issues.
