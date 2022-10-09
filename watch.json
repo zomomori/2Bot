@@ -1,0 +1,9 @@
+{
+  "install": {
+    // ...
+  },
+  "restart": {
+    // ...
+  },
+  "throttle": 900000 // delay in milliseconds (900000 = 15 min)
+}
