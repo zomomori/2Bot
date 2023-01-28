@@ -1,51 +1,21 @@
-const Discord = require("discord.js");
 const config = require("./botconfig.json");
 
 var board;
 var blank = "⚪";
-var red = "🟣";
-var black = "🔴";
+var purple = "🟣";
+var red = "🔴";
 
 var player1;
 var player2;
 var headerString;
 var footerString;
 var currPlayer;
-var aiColor = black;
+var aiColor = red;
 var gameMessage;
 var last_i;
 var last_j;
 var inGame = false;
 let reactions = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣'];
-
-// function reactToCommands(msg, message)
-// {
-//     if(!message.startsWith("?")) {
-//         return;
-//     }
-//     else if(message.startsWith("?help")) {
-//         help(msg);
-//     }
-//     else if(message.startsWith("?newgame ")) {
-//         newPlayerGame(msg, message);
-//     }
-//     else if(message.startsWith("?newgame")) {
-//         aiColor = black;
-//         player1 = msg.author.id;
-//         player2 = null;
-//         newGame(msg, msg.author.username, "the AI");
-//     }
-//     else if(message.startsWith("?youstart")) {
-//         useDMs = false;
-//         aiColor = red;
-//         player1 = null;
-//         player2 = msg.author.id;
-//         newGameAIStarts(msg, msg.author.username, "the AI");
-//     }
-//     else if(message.startsWith("?play ")) {
-//         playMove(msg, message);
-//     }
-// }
 
 function command_c4PlayerGame(message, botUser) {
 	var p1;
@@ -63,6 +33,10 @@ function command_c4PlayerGame(message, botUser) {
 	} else if (!p1) {
 		p1 = p2;
 		p2 = botUser;
+	}
+	if (p1.id === p2.id) {
+		message.channel.send('You can\'t play with yourself...');
+		return;
 	}
 	player1 = p1;
 	player2 = p2;
@@ -111,11 +85,9 @@ async function refreshBoard(gameMessage, isPlayer1) {
 		for (var j = 0; j < board[i].length; j++) {
 			if (i === last_i && j === last_j) {
 				if (!isPlayer1) {
-					// boardMessage += '<:red:969823360139792414>';
-					boardMessage += black;
+					boardMessage += '<:darkRed:1068994561210318848>';
 				} else {
-					// boardMessage += '<:purple:969823326899941426>';
-					boardMessage += red;
+					boardMessage += '<:darkPurple:1068994531766309086>';
 				}
 			} else {
 				boardMessage += board[i][j];
@@ -239,8 +211,8 @@ function getAvailableRowInColumn(column) {
 
 function getCurrentColor(id) {
 	if (player1.id === id)
-		return red;
-	return black;
+		return purple;
+	return red;
 }
 
 function detectWin(color) {
@@ -344,9 +316,9 @@ function getPossibleMoves() {
 }
 
 function getInverseColor(color) {
-	if (color === black)
-		return red;
-	return black;
+	if (color === red)
+		return purple;
+	return red;
 }
 
 function getWinningMoves(possibleMoves, color) {
@@ -377,16 +349,6 @@ function hardCopy2DArray(sourceArray) {
 function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-// function randn_bm() {
-//   let u = 0, v = 0;
-//   while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)
-//   while(v === 0) v = Math.random();
-//   let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
-//   num = num / 10.0 + 0.5; // Translate to 0 -> 1
-//   if (num > 1 || num < 0) return randn_bm() // resample between 0 and 1
-//   return num
-// }
 
 module.exports = {
 	command_c4PlayerGame

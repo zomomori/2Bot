@@ -8,8 +8,8 @@ const {
 	MessageActionRow,
 	MessageButton
 } = require('discord.js');
-let reactions = ['✅', '<a:20timer:970630330836992130>'];
-let game_timer = ['<a:20timer:970630330836992130>'];
+let reactions = ['✅', '<a:20timer:1066117966132953108>'];
+let game_timer = ['<a:20timer:1066117966132953108>'];
 
 
 var inGame = false;
